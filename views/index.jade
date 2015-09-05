@@ -1,5 +1,34 @@
 extends layout
 
+block sidebar
+  #sidebar.dark(ng-app="symbolSelect")
+    a.sidebar-btn(href="#")
+      span
+      span
+      span
+    .content-wrap
+      .content
+        h2 Tickers
+        ul(ng-controller="symbolController" ng-init="init()")
+          li.track(ng-repeat="track in tracks")
+            .content
+              h3.accent {{track.title}}
+            ul(class="tickers")
+              li.ticker(ng-repeat="ticker in track.tickers")
+                .content
+                  h4 {{ticker}}
+              li.ticker
+                a(href="#" class="addBtn") + Add Ticker
+          li.track
+            a(href="#" class="addBtn") + Add Track
+
 block content
-  h1= title
-  p Welcome to #{title}
+  #main
+    a.sidebar-btn(href="#")
+      span
+      span
+      span
+    .content-wrap
+      .content
+        h1= title
+        p Welcome to #{title}
