@@ -12,26 +12,7 @@ block sidebar
       span
     .content-wrap
       .content
-        h2 Tickers
-        ul(ng-controller="symbolController" ng-init="init()")
-          li.track(ng-repeat="track in tracks")
-            .content
-              a(href="#" class="deleteBtn" ng-click="delTrack(track)") Delete
-              h3.accent {{track.title}}
-            ul(class="tickers")
-              li.ticker(ng-repeat="ticker in track.tickers")
-                .content
-                  a(href="#" class="deleteBtn" ng-click="delTicker(ticker, track)") Delete
-                  h4 {{ticker}}
-
-              li.ticker
-                form
-                  .form-group
-                    input.form-control.dark(ng-keypress="keyPress($event, track)" ng-model="ticker" class="sfTypeahead" options="tickerOptions" datasets="tickerData" placeholder="+ Add Ticker")
-          li.track
-            form(ng-submit="addTrack()")
-              .form-group
-                input.form-control.dark(ng-model="track" placeholder="+ Add Track")
+        include sidebar.jade
 
 block content
   #main
