@@ -1,5 +1,9 @@
 extends layout
 
+block head
+  script(src="/js/music.js")
+  link(rel="/stylesheets/music.css")
+
 block sidebar
   #sidebar.dark(ng-app="symbolSelect")
     a.sidebar-btn(href="#")
