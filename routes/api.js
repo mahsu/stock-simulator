@@ -5,7 +5,8 @@ var db = require('../db_con').connection;
 var symbol_cache = [];
 
 router.get('/stocks/symbol/:symbol', function(req, res, next) {
-  var date = res.toMsqld(new Date(req.query.start)) || "1990-02-01";
+  var date = req.query.start || "1990-02-01"
+  date = res.toMsqld(new Date(date));
   var limit = parseInt(req.query.limit) || 60;
   console.log(date, limit);
   db.query("SELECT * FROM price WHERE symbol=? AND date_ex >= ? ORDER BY date_ex ASC LIMIT ?",[req.params.symbol,date,limit], function(err, data){
