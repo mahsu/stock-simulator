@@ -14,13 +14,13 @@ symbolSelect.controller('symbolController', function($scope) {
   var allTickers = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
-    local: ['ASDF', 'HJKL', 'QWER', 'TYTU']
+    prefetch: 'api/stocks/symbols' 
   });
 
   allTickers.initialize();
 
   $scope.tickerOptions = {
-    minLength: 3,
+    minLength: 1,
     highlight: true
   }
 
@@ -34,11 +34,11 @@ symbolSelect.controller('symbolController', function($scope) {
     $scope.tracks = [
     {
       title: "Default",
-      tickers: ["ABC", "DEF"]
+      tickers: ["AAPL", "GOOG"]
     },
     {
       title: "Default",
-      tickers: ["GHI", "JKL"]
+      tickers: ["A", "AA"]
     }
     ];
   };
@@ -71,12 +71,18 @@ symbolSelect.controller('symbolController', function($scope) {
   }
 
   $scope.keyPress = function(ev, track) {
+    var tgt = $(ev.target);
     if (ev.keyCode == 13) {
-      var tgt = $(ev.target);
-      $scope.addTicker(tgt.prev().val(), track);
+      
+      if (allTickers.get(tgt.val()).length != 0) {
+      console.log(tgt.val());
+      $scope.addTicker(tgt.val(), track);
       tgt.val('');
       tgt.typeahead('close');
-    }
+
+      }
+      
+          }
   }
 
 });

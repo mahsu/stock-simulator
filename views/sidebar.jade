@@ -13,8 +13,8 @@ ul(ng-controller="symbolController" ng-init="init()")
       li.ticker
         form
           .form-group
-            input.form-control.dark(ng-keypress="keyPress($event, track)" ng-model="ticker" class="sfTypeahead" options="tickerOptions" datasets="tickerData" placeholder="+ Add Ticker")
+            input.form-control.dark(ng-keypress="keyPress($event, track)" ng-model="ticker" class="sfTypeahead" options="tickerOptions" datasets="tickerData" placeholder="+ Add Ticker" name="add")
   li.track
     form(ng-submit="addTrack()")
       .form-group
-        input.form-control.dark(ng-model="track" placeholder="+ Add Track")
+        input.form-control.dark(ng-model="track" placeholder="+ Add Track" name="add")
