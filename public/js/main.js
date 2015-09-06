@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 var symbolSelect = angular.module('symbolSelect', ['siyfion.sfTypeahead']);
 
-symbolSelect.controller('symbolController', function($scope) {
+symbolSelect.controller('symbolController', function($scope,$http) {
   var allTickers = new Bloodhound({
     datumTokenizer: Bloodhound.tokenizers.whitespace,
     queryTokenizer: Bloodhound.tokenizers.whitespace,
@@ -32,20 +32,24 @@ symbolSelect.controller('symbolController', function($scope) {
   $scope.init = function() {
 
     $scope.tracks = [
-    {
+    /*{
       title: "Default",
-      tickers: ["AAPL", "GOOG"]
+      tickers: ["AAPL", "GOOG"],
+      data: []
     },
     {
       title: "Default",
-      tickers: ["A", "AA"]
-    }
+      tickers: ["A", "AA"],
+      data: []
+    }*/
     ];
   };
 
   $scope.delTicker = function(ticker, track) {
     ticker = ticker.toUpperCase();
-    track.tickers.splice(track.tickers.indexOf(ticker), 1);
+    var index = track.tickers.indexOf(ticker);
+    track.tickers.splice(index, 1);
+    track.data.splice(index,1);
   }
 
   $scope.delTrack = function(track) {
@@ -55,7 +59,18 @@ symbolSelect.controller('symbolController', function($scope) {
   $scope.addTicker = function(ticker, track) {
     ticker = ticker.toUpperCase();
     if (ticker != "" && !_.contains(track.tickers, ticker)) {
-      track.tickers.push(ticker);
+      $http.get("/api/stocks/symbol/"+ticker, {
+        params: {
+          limit: 60
+          //start: "1995-10-1"
+        }
+      }).success(function(data, status, headers, config) {
+        track.tickers.push(ticker);
+        track.data.push(data);
+        console.log(track);
+      }). error(function(data, status, headers, config) {
+        console.log(data);
+      });
     }
     $scope.ticker = '';
   }
@@ -64,7 +79,8 @@ symbolSelect.controller('symbolController', function($scope) {
     if (this.track != '') {
       $scope.tracks.push({
         title: this.track,
-        tickers: []
+        tickers: [],
+        data: []
       });
     }
     $scope.track = '';
@@ -75,14 +91,12 @@ symbolSelect.controller('symbolController', function($scope) {
     if (ev.keyCode == 13) {
       
       if (allTickers.get(tgt.val()).length != 0) {
-      console.log(tgt.val());
-      $scope.addTicker(tgt.val(), track);
-      tgt.val('');
-      tgt.typeahead('close');
-
-      }
-      
-          }
+        //console.log(tgt.val());
+        $scope.addTicker(tgt.val(), track);
+        tgt.val('');
+        tgt.typeahead('close');
+      }    
+    }
   }
 
 });
